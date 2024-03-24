@@ -298,8 +298,18 @@
   )
 )
 
+(typename $lhwiovec
+  (record
+    ;;; The address of the buffer to be written.
+    (field $buf (@witx const_pointer u8))
+    ;;; The length of the buffer to be written.
+    (field $buf_len $filesize)
+  )
+)
+
 (typename $iovec_array (list $iovec))
 (typename $ciovec_array (list $ciovec))
+(typename $lhwiovec_array (list $lhwiovec))
 
 ;;; Relative offset within a file.
 (typename $filedelta s64)

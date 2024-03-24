@@ -94,6 +94,11 @@
     (result $error (expected (error $errno)))
   )
 
+  (@interface func (export "fd_close_wasm64")
+    (param $fd $fd)
+    (result $error (expected (error $errno)))
+  )
+
   ;;; Synchronize the data of a file to disk.
   ;;; Note: This is similar to `fdatasync` in POSIX.
   (@interface func (export "fd_datasync")
@@ -107,6 +112,13 @@
     (param $fd $fd)
     ;;; The buffer where the file descriptor's attributes are stored.
     (result $error (expected $fdstat (error $errno)))
+  )
+
+  (@interface func (export "fd_fdstat_get_wasm64")
+    (param $fd $fd)
+    (param $buf $filesize)
+    ;;; The buffer where the file descriptor's attributes are stored.
+    (result $error (expected (error $errno)))
   )
 
   ;;; Adjust the flags associated with a file descriptor.
@@ -257,6 +269,17 @@
     (result $error (expected $filesize (error $errno)))
   )
 
+  (@interface func (export "fd_seek_wasm64")
+    (param $fd $fd)
+    ;;; The number of bytes to move.
+    (param $offset $filedelta)
+    ;;; The base from which the offset is relative.
+    (param $whence $whence)
+    (param $newoffset $filesize)
+    ;;; The new offset of the file descriptor, relative to the start of the file.
+    (result $error (expected (error $errno)))
+  )
+
   ;;; Synchronize the data and metadata of a file to disk.
   ;;; Note: This is similar to `fsync` in POSIX.
   (@interface func (export "fd_sync")
@@ -279,6 +302,13 @@
     ;;; List of scatter/gather vectors from which to retrieve data.
     (param $iovs $ciovec_array)
     (result $error (expected $size (error $errno)))
+  )
+
+  (@interface func (export "fd_write_wasm64")
+    (param $fd $fd)
+    ;;; List of scatter/gather vectors from which to retrieve data.
+    (param $iovs $lhwiovec_array)
+    (result $error (expected $filesize (error $errno)))
   )
 
   ;;; Create a directory.
@@ -441,6 +471,12 @@
   ;;; termination of the program. The meanings of other values is dependent on
   ;;; the environment.
   (@interface func (export "proc_exit")
+    ;;; The exit code returned by the process.
+    (param $rval $exitcode)
+    (@witx noreturn)
+  )
+
+  (@interface func (export "proc_exit_wasm64")
     ;;; The exit code returned by the process.
     (param $rval $exitcode)
     (@witx noreturn)
